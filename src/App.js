@@ -1,45 +1,53 @@
-import './App.css';
-import React from 'react';
-import CommentList from "./components/CommentList";
-import Context from './Context'
+import React from "react";
+import Ul from "./components/Ul";
 import AddComments from "./components/AddComments";
 
-function App () {
-  const [comments, setComments] = React.useState([
-    { id: 1, name: "вася", comments: "sdsfdsf" },
-    { id: 2, name: "вася", comments: "sdsfdsf" },
-  ]);
-  
-  function removeComment(id){
-    setComments(comments.filter((comments) => comments.id !== id));
+class TodoApp extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      list: [],
+      newNameUser: "",
+      newComments: "",
+    };
   }
-  function addCommentaries(name, comments) {
-    console.log(comments)
-    setComments(
-     comments.push([{
-       name,
-       comments,
+
+  addComment(e) {
+    const list = this.state.list;
+    list.push({
+      name: this.state.newNameUser,
+      comments: this.state.newComments,
       date: new Date().toLocaleTimeString(),
       id: Date.now(),
-      
-    }])
-    );
+    });
+    this.setState({ list });
+    this.setState({ newNameUser: "", newComments: "" });
   }
 
-  return (
-    <Context.Provider value={{ removeComment }}>
-      <div className="container">
-        {comments.length ? (
-          <CommentList comments={setComments} />
-        ) : (
-          <p>Нет коментариев</p>
-        )}
-        <AddComments onCreate={addCommentaries} />
+  deleteComments(index) {
+    const list = this.state.list;
+    this.setState(list.splice(index, 1));
+  }
+
+  render() {
+    return (
+      <div>
+        <AddComments
+          state={this.state}
+          addComment={() => this.addComment()}
+          setStateComments={(e) => {
+            this.setState({ newComments: e.target.value })
+          }}
+          setStateNameUser={(e) => {
+            this.setState({ newNameUser: e.target.value })
+          }}
+        />
+
+        <Ul state={this.state.list} remove={() => this.deleteComments()} />
       </div>
-    </Context.Provider>
-  );
-
-
+    );
+  }
 }
 
-export default App;
+export default TodoApp;

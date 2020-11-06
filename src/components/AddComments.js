@@ -1,33 +1,35 @@
-import React, {useState} from "react";
+import React from 'react'
 
-
-function AddComments({ onCreate }) {
-  const [name, setName] = useState('');
-  const [comments, setComments] = useState('');
-
-  function submitHandler(e) {
-    console.log(comments);
-    console.log(name);
-    e.preventDefault();
-    if (comments && name) {
-      onCreate(comments, name);
-    }
-  }
-
-  return (
-    <form className="addComments" onSubmit={submitHandler}>
-      <input
-        placeholder="Имя"
-        value={name}
-        onChange={(ev) => setName( ev.target.value)}
-      ></input>
-      <input
-        placeholder="Комментраий"
-        value={comments}
-        onChange={(ev) => setComments(ev.target.value )}
-      ></input>
-      <button type="submit">Отправить</button>
-    </form>
-  );
+function AddComments(props){
+    return (
+      <form
+        onSubmit={(e) => {
+          {
+            e.preventDefault();
+            if (
+              props.state.newNameUser !== "" &&
+              props.state.newComments !== ""
+            ) {
+              props.addComment(e);
+            }
+          }
+        }}
+      >
+        <input
+          type="text"
+          value={props.state.newNameUser}
+          placeholder="Имя"
+          onChange={props.setStateNameUser}
+        ></input>
+        <input
+          type="text"
+          name="comments"
+          placeholder="Ваш коментарий"
+          value={props.state.newComments}
+          onChange={props.setStateComments}
+        ></input>
+        <button type="submit">Отправить</button>
+      </form>
+    );
 }
 export default AddComments;
