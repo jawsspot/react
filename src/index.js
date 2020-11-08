@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import TodoApp from "./App"
+import NoteApp from "./App"
 
 
 
 
 
 ReactDOM.render(
-  <TodoApp />, 
+  <NoteApp />, 
 
   document.getElementById("root")
 );
