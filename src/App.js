@@ -1,5 +1,6 @@
 import React from "react";
 import Ul from "./components/Ul";
+
 import AddComments from "./components/AddComments";
 import './App.css'
 
@@ -9,22 +10,21 @@ class NoteApp extends React.Component {
   constructor() {
     super();
 
-      if (localStorage.getItem("comments") === null) {
-        commentsLoadState = [];
-      } else {
-        let comments = localStorage.getItem("comments");
-        comments = JSON.parse(comments);
-        let arr = [];
-        commentsLoadState = comments.map((item) => 
-          arr.push(item)
-        );
-        commentsLoadState = arr;
-      }
+    if (localStorage.getItem("comments") === null) {
+      commentsLoadState = [];
+    } else {
+      let comments = localStorage.getItem("comments");
+      comments = JSON.parse(comments);
+      let arr = [];
+      commentsLoadState = comments.map((item) => arr.push(item));
+      commentsLoadState = arr;
+    }
 
     this.state = {
       list: commentsLoadState,
       newNameUser: "",
       newComments: "",
+      validate: "",
     };
   }
 
@@ -43,7 +43,13 @@ class NoteApp extends React.Component {
 
     this.setState({ list: listAdd });
     this.setState({ newNameUser: "", newComments: "" });
+    this.setState({ validate: "" });
   }
+
+  validation(e) {
+    this.setState({ validate: "Вы ничего не ввели" });
+  }
+
 
   deleteComments(index) {
     const listAdd = this.state.list;
@@ -51,7 +57,7 @@ class NoteApp extends React.Component {
 
     let toLocalStor = JSON.stringify(listAdd);
     localStorage.setItem("comments", toLocalStor);
-    
+
     this.setState({ list: listAdd });
   }
 
@@ -62,12 +68,14 @@ class NoteApp extends React.Component {
           state={this.state}
           addComment={() => this.addComment()}
           setStateComments={(e) => {
-            this.setState({ newComments: e.target.value });
+            this.setState({ newComments: e.target.value, validate: ""});
           }}
           setStateNameUser={(e) => {
-            this.setState({ newNameUser: e.target.value });
+            this.setState({ newNameUser: e.target.value, validate: "" });
           }}
+          validation={() => this.validation()}
         />
+        
 
         <Ul state={this.state.list} remove={() => this.deleteComments()} />
       </div>
